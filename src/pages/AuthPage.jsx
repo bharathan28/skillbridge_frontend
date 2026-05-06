@@ -4,22 +4,29 @@ import { useAuth } from "../context/AuthContext";
 export default function AuthPage() {
   const { login, signup } = useAuth();
   const [tab, setTab]   = useState("login");
-  const [form, setForm] = useState({ email:"alex@example.com", password:"password123", first_name:"", last_name:"", username:"" });
+  const [form, setForm] = useState({ email:"", password:"", first_name:"", last_name:"", username:"" });
   const [busy, setBusy] = useState(false);
   const [err,  setErr]  = useState("");
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const submit = async () => {
-    setErr(""); setBusy(true);
+    setErr("");
+
+    // Validate BEFORE setting busy, so we never get stuck
+    if (tab === "login") {
+      if (!form.email || !form.password) { setErr("Email and password required."); return; }
+    } else {
+      if (!form.email || !form.password || !form.username || !form.first_name) {
+        setErr("All fields are required."); return;
+      }
+    }
+
+    setBusy(true);
     try {
       if (tab === "login") {
-        if (!form.email || !form.password) { setErr("Email and password required."); return; }
         await login(form.email, form.password);
       } else {
-        if (!form.email || !form.password || !form.username || !form.first_name) {
-          setErr("All fields are required."); return;
-        }
         await signup({ ...form, password2: form.password });
       }
     } catch (e) {
