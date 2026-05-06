@@ -1,6 +1,6 @@
 
-export const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-export const WS_BASE  = import.meta.env.VITE_WS_URL  || "ws://localhost:8000";
+export const BASE_URL = import.meta.env.VITE_API_URL 
+export const WS_BASE  = import.meta.env.VITE_WS_URL  
 
 // ── Token helpers ─────────────────────────────────────────────
 export const getAccess  = () => localStorage.getItem("ss_access");
