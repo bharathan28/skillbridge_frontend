@@ -1,34 +1,37 @@
 import { useState } from "react";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import AuthPage      from "./pages/AuthPage";
-import Dashboard     from "./pages/Dashboard";
-import SkillsPage    from "./pages/SkillsPage";
-import MatchesPage   from "./pages/MatchesPage";
-import ChatPage      from "./pages/ChatPage";
-import VideoPage     from "./pages/VideoPage";
-import AIMatchingPage from "./pages/AIMatchingPage";
-import ProfilePage   from "./pages/ProfilePage";
-import Sidebar       from "./components/Sidebar";
-import "./index.css";
+import AuthProvider, { useAuth } from "./context/AuthContext";
+import AuthPage        from "./pages/AuthPage";
+import ProfileSetup    from "./pages/ProfileSetup";
+import Sidebar         from "./components/Sidebar";
+import Dashboard       from "./pages/Dashboard";
+import SkillsPage      from "./pages/SkillsPage";
+import MatchesPage     from "./pages/MatchesPage";
+import ChatPage        from "./pages/ChatPage";
+import VideoPage       from "./pages/VideoPage";
+import AIMatchingPage  from "./pages/AIMatchingPage";
+import ProfilePage     from "./pages/ProfilePage";
 
-function Shell() {
-  const { user, ready, logout } = useAuth();
+function AppInner() {
+  const { user, loading, logout } = useAuth();
   const [page, setPage] = useState("dashboard");
 
-  if (!ready) return (
-    <div style={{ display:"flex", alignItems:"center", justifyContent:"center",
-      height:"100vh", background:"var(--bg3)", flexDirection:"column", gap:12 }}>
-      <div style={{ width:40, height:40, background:"var(--brand)", borderRadius:12,
-        display:"flex", alignItems:"center", justifyContent:"center" }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
+  if (loading) return (
+    <div style={{ height: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: "var(--brand)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div className="spinner spinner-brand" style={{ margin: "0 auto" }} />
       </div>
-      <div style={{ fontSize:13, color:"var(--muted)" }}>Loading SkillBridge…</div>
     </div>
   );
 
   if (!user) return <AuthPage />;
+
+  // After signup: require profile completion before showing app
+  if (!user.is_profile_complete) return <ProfileSetup user={user} />;
 
   const pages = {
     dashboard: <Dashboard     user={user} setPage={setPage} />,
@@ -43,11 +46,17 @@ function Shell() {
   return (
     <div className="app-shell">
       <Sidebar page={page} setPage={setPage} />
-      <main className="main-content">{pages[page] || pages.dashboard}</main>
+      <div className="main-content">
+        {pages[page] || pages.dashboard}
+      </div>
     </div>
   );
 }
 
 export default function App() {
-  return <AuthProvider><Shell /></AuthProvider>;
+  return (
+    <AuthProvider>
+      <AppInner />
+    </AuthProvider>
+  );
 }
