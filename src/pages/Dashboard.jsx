@@ -3,9 +3,9 @@ import { useApi, useAction } from "../hooks/useApi";
 import { matchingApi, sessionsApi } from "../api/client";
 
 const AVATAR_COLORS = [
-  { bg: "#EFF6FF", color: "#1D4ED8" }, { bg: "#F0FDF4", color: "#166534" },
-  { bg: "#FFF7ED", color: "#9A3412" }, { bg: "#FAF5FF", color: "#7E22CE" },
-  { bg: "#FFF1F2", color: "#9F1239" },
+  { bg: "#E8F5F2", color: "#094D42" }, { bg: "#EDE9FE", color: "#4C1D95" },
+  { bg: "#FEF5E4", color: "#7A4D04" }, { bg: "#FDF0F0", color: "#8B1F1F" },
+  { bg: "#EFF6FF", color: "#1E3A8A" },
 ];
 
 const initials = u => {
@@ -22,8 +22,8 @@ const greet = () => {
 };
 
 export default function Dashboard({ user, setPage }) {
-  const { data: matches,  refetch: reM } = useApi(() => matchingApi.getMatches());
-  const { data: sessions              }  = useApi(() => sessionsApi.list());
+  const { data: matches, refetch: reM } = useApi(() => matchingApi.getMatches());
+  const { data: sessions              } = useApi(() => sessionsApi.list());
   const { run } = useAction();
   const [accepted, setAccepted] = useState([]);
 
@@ -45,7 +45,9 @@ export default function Dashboard({ user, setPage }) {
     <div className="page">
       <div className="topbar">
         <div>
-          <div style={{ fontSize: 12, color: "var(--muted)" }}>{greet()},</div>
+          <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, letterSpacing: ".5px", textTransform: "uppercase", marginBottom: 2 }}>
+            {greet()}
+          </div>
           <h2>{user?.first_name || user?.username} 👋</h2>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
@@ -82,12 +84,12 @@ export default function Dashboard({ user, setPage }) {
                   <div key={m.id} className="request-card">
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                        <div className="avatar avatar-sm" style={{ background: "#EFF6FF", color: "#1D4ED8" }}>
+                        <div className="avatar avatar-sm" style={{ background: "#E8F5F2", color: "#094D42" }}>
                           {initials(m.user1)}
                         </div>
                         <div>
                           <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{m.user1?.full_name}</div>
-                          <div style={{ fontSize: 12, color: "var(--muted)" }}>wants to swap skills with you</div>
+                          <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 400 }}>wants to swap skills with you</div>
                         </div>
                       </div>
                       <span className={`chip ${done ? "chip-green" : "chip-amber"}`}>
@@ -117,7 +119,7 @@ export default function Dashboard({ user, setPage }) {
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
             <div className="section-title" style={{ margin: 0 }}>Your matches</div>
-            <button className="btn btn-ghost btn-sm" style={{ fontSize: 12, color: "var(--brand)" }}
+            <button className="btn btn-ghost btn-sm" style={{ fontSize: 12, color: "var(--brand)", fontWeight: 600 }}
               onClick={() => setPage("matches")}>View all →</button>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -126,24 +128,24 @@ export default function Dashboard({ user, setPage }) {
                 <div className="avatar avatar-md" style={{ background: AVATAR_COLORS[i % 5].bg, color: AVATAR_COLORS[i % 5].color }}>
                   {initials(m.user2)}
                 </div>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)", marginBottom: 2 }}>
                     {m.user2?.full_name || m.user2?.username}
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--muted)" }}>
+                  <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 400, marginBottom: 5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {m.user1_teach_skill?.name && <>Teaches {m.user1_teach_skill.name}</>}
                     {m.user1_learn_skill?.name && <> · Wants {m.user1_learn_skill.name}</>}
                   </div>
-                  <div style={{ display: "flex", gap: 4, marginTop: 5 }}>
+                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                     <span className="chip chip-blue" style={{ fontSize: 10 }}>{m.type}</span>
                     <span className={`chip ${m.status === "accepted" ? "chip-green" : "chip-amber"}`} style={{ fontSize: 10 }}>{m.status}</span>
                   </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flexShrink: 0 }}>
                   <div className="score-circle">
                     {m.similarity_score ? `${Math.round(m.similarity_score)}%` : "—"}
                   </div>
-                  <div style={{ fontSize: 10, color: "var(--muted)" }}>match</div>
+                  <div style={{ fontSize: 10, color: "var(--muted)", fontWeight: 500 }}>match</div>
                 </div>
               </div>
             )) : (
@@ -164,7 +166,7 @@ export default function Dashboard({ user, setPage }) {
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
             <div className="section-title" style={{ margin: 0 }}>Upcoming sessions</div>
-            <button className="btn btn-ghost btn-sm" style={{ fontSize: 12, color: "var(--brand)" }}
+            <button className="btn btn-ghost btn-sm" style={{ fontSize: 12, color: "var(--brand)", fontWeight: 600 }}
               onClick={() => setPage("video")}>Schedule →</button>
           </div>
 
@@ -172,18 +174,18 @@ export default function Dashboard({ user, setPage }) {
             const other = s.host?.id === user?.id ? s.guest : s.host;
             return (
               <div key={s.id} className="card card-sm" style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-                <div style={{ width: 42, height: 42, borderRadius: 10, background: "var(--brand-light)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ width: 42, height: 42, borderRadius: 11, background: "var(--brand-light)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2"/>
                     <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
                     <line x1="3" y1="10" x2="21" y2="10"/>
                   </svg>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
                     {s.topic || "Session"} with {other?.first_name || other?.username}
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--muted)" }}>
+                  <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 400 }}>
                     {new Date(s.scheduled_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })} · {s.duration_minutes} min
                   </div>
                 </div>
@@ -192,7 +194,7 @@ export default function Dashboard({ user, setPage }) {
             );
           }) : (
             <div className="empty-state" style={{ padding: "24px" }}>
-              <div style={{ fontSize: 13, color: "var(--muted)" }}>No upcoming sessions</div>
+              <div style={{ fontSize: 13, color: "var(--muted)", fontWeight: 400 }}>No upcoming sessions</div>
             </div>
           )}
         </div>
@@ -203,16 +205,23 @@ export default function Dashboard({ user, setPage }) {
           <div className="grid2">
             {[
               { label: "Add a skill", sub: "Teach or learn something new", page: "skills", icon: "+" },
-              { label: "Run AI match", sub: "Find your best matches", page: "ai",     icon: "✦" },
+              { label: "Run AI match", sub: "Find your best matches now", page: "ai",     icon: "✦" },
             ].map(a => (
-              <button key={a.page} className="btn" style={{ padding: "12px 14px", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}
+              <button key={a.page} className="card card-hover"
+                style={{ padding: "14px 16px", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4, border: "1px solid var(--border)", cursor: "pointer" }}
                 onClick={() => setPage(a.page)}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{a.icon} {a.label}</div>
-                <div style={{ fontSize: 11, color: "var(--muted)" }}>{a.sub}</div>
+                <div style={{ width: 32, height: 32, borderRadius: 9, background: "var(--brand-light)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--brand)", fontSize: 16, fontWeight: 700, marginBottom: 4 }}>
+                  {a.icon}
+                </div>
+                <div style={{ fontSize: 13.5, fontWeight: 700, color: "var(--ink)" }}>{a.label}</div>
+                <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 400 }}>{a.sub}</div>
               </button>
             ))}
           </div>
         </div>
+
+        {/* Bottom padding for mobile nav */}
+        <div style={{ height: 8 }} />
       </div>
     </div>
   );

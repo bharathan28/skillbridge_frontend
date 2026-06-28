@@ -99,12 +99,12 @@ export default function ProfileSetup({ user }) {
             <div className="grid2" style={{ gap: 12 }}>
               <div className="form-group">
                 <label className="form-label">First name</label>
-                <input className="form-input" placeholder="Alex" value={form.first_name}
+                <input className="form-input"  value={form.first_name}
                   onChange={e => set("first_name", e.target.value)} />
               </div>
               <div className="form-group">
                 <label className="form-label">Last name</label>
-                <input className="form-input" placeholder="Johnson" value={form.last_name}
+                <input className="form-input"  value={form.last_name}
                   onChange={e => set("last_name", e.target.value)} />
               </div>
             </div>

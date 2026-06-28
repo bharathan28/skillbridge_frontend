@@ -1,56 +1,81 @@
 const navItems = [
   { id: "dashboard", icon: <DashIcon />, label: "Home" },
-  { id: "skills", icon: <StarIcon />, label: "Skills" },
-  { id: "matches", icon: <UsersIcon />, label: "Match", badge: true },
-  { id: "chat", icon: <ChatIcon />, label: "Chat", badge: true },
-  { id: "video", icon: <VideoIcon />, label: "Video" },
-  { id: "ai", icon: <AIIcon />, label: "AI" },
+  { id: "skills",    icon: <StarIcon />, label: "Skills" },
+  { id: "matches",   icon: <UsersIcon />, label: "Match", badge: true },
+  { id: "chat",      icon: <ChatIcon />, label: "Chat", badge: true },
+  { id: "video",     icon: <VideoIcon />, label: "Video" },
+  { id: "ai",        icon: <AIIcon />, label: "AI" },
 ];
 
 export default function Sidebar({ page, setPage }) {
   return (
-    <nav className="sidebar">
-      <div className="sidebar-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
-      </div>
+    <>
+      {/* Desktop sidebar */}
+      <nav className="sidebar">
+        <div className="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+        </div>
 
-      {navItems.map((item) => (
-        <div className="nav-item" key={item.id}>
+        {navItems.map((item) => (
+          <div className="nav-item" key={item.id}>
+            <button
+              className={`nav-btn${page === item.id ? " active" : ""}`}
+              onClick={() => setPage(item.id)}
+              title={item.label}
+            >
+              {item.icon}
+              {item.badge && page !== item.id && <div className="nav-badge" />}
+            </button>
+          </div>
+        ))}
+
+        <div className="sidebar-spacer" />
+
+        <div className="nav-item">
           <button
-            className={`nav-btn${page === item.id ? " active" : ""}`}
+            className={`nav-btn${page === "profile" ? " active" : ""}`}
+            onClick={() => setPage("profile")}
+            title="Profile"
+          >
+            <ProfileIcon />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile bottom nav */}
+      <nav className="bottom-nav">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            className={`bottom-nav-btn${page === item.id ? " active" : ""}`}
             onClick={() => setPage(item.id)}
-            title={item.label}
           >
             {item.icon}
             {item.badge && page !== item.id && <div className="nav-badge" />}
+            <span>{item.label}</span>
           </button>
-        </div>
-      ))}
-
-      <div className="sidebar-spacer" />
-
-      <div className="nav-item">
+        ))}
         <button
-          className={`nav-btn${page === "profile" ? " active" : ""}`}
+          className={`bottom-nav-btn${page === "profile" ? " active" : ""}`}
           onClick={() => setPage("profile")}
-          title="Profile"
         >
           <ProfileIcon />
+          <span>Profile</span>
         </button>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }
 
 function DashIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      <rect x="14" y="14" width="7" height="7" rx="1.5" />
     </svg>
   );
 }
