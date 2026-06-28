@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AuthProvider, { useAuth } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import AuthPage        from "./pages/AuthPage";
 import ProfileSetup    from "./pages/ProfileSetup";
 import Sidebar         from "./components/Sidebar";
